@@ -1,0 +1,12 @@
+.DS_Store
+
+# Temporary files
+tmp/*
+
+# Log files
+*.log
+
+# SSH keys / secrets
+*.pem
+*.key
+.env
