@@ -6,7 +6,7 @@ The project demonstrates Linux/Bash scripting, SSH key authentication, inbound a
 
 ## Why I Built This
 
-I built this project to gain hands-on experience with Linux, Bash scripting, and SFTP automation, as I had not previously used these technologies in a professional environment. Since I primarily develop on macOS, I was already familiar with the Unix-style terminal and common command-line operations. This project allowed me to build on that foundation and apply those skills to a practical data engineering workflow.
+I built this project to gain hands on experience with Linux, Bash scripting, and SFTP automation, as I had not previously used these bash in a professional environment. Since I primarily develop on macOS, I was already familiar with the Unix-style terminal and common command-line operations. This project helped me build on that foundation and apply those skills to a practical data engineering workflow.
 
 ## Architecture
 
