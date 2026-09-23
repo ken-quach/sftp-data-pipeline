@@ -4,6 +4,10 @@ A Bash-based file transfer pipeline that simulates automated data exchange betwe
 
 The project demonstrates Linux/Bash scripting, SSH key authentication, inbound and outbound SFTP transfers, configuration management, file validation, logging, error handling, and file archiving.
 
+## Why I Built This
+
+I built this project to gain hands-on experience with Linux, Bash scripting, and SFTP automation, as I had not previously used these technologies in a professional environment. Since I primarily develop on macOS, I was already familiar with the Unix-style terminal and common command-line operations. This project allowed me to build on that foundation and apply those skills to a practical data engineering workflow.
+
 ## Architecture
 
 ### Inbound Flow
@@ -82,18 +86,7 @@ SFTP connection settings are stored separately from the job logic in:
 etc/sftp_config.sh
 ```
 
-Example configuration:
-
-```bash
-SFTP_HOST="localhost"
-SFTP_USER="your_username"
-SFTP_KEY="$HOME/.ssh/sftp_pipeline_key"
-
-REMOTE_INBOUND_DIR="vendor_sftp/inbound"
-REMOTE_OUTBOUND_DIR="vendor_sftp/from_company"
-```
-
-The Bash jobs load these settings using `source`, allowing connection parameters to be managed separately from the transfer logic.
+The Bash scripts load these config settings using `source`.
 
 ## Running the Pipeline
 
@@ -140,7 +133,7 @@ The job checks that the downloaded file:
 - Exists
 - Is not empty
 
-After successful validation, a timestamped copy is placed in the archive directory.
+After a successful download, a timestamped copy is placed in the archive directory. The purpose is to ensure files don't get immediately removed and lost without intention.
 
 Example:
 
@@ -162,13 +155,13 @@ Vendor SFTP
 
 Before attempting the transfer, the job verifies that the outbound file exists.
 
-The SFTP process exit status is captured and used to determine whether the job completed successfully.
+The SFTP process exit status is recorded and used to determine whether the job completed successfully.
 
 ## Logging
 
-Both jobs write operational information to the `log/` directory.
+Both scripts log contextual information to the `log/` directory.
 
-Example events include:
+Example entries would include:
 
 - Successful file transfers
 - Missing files
@@ -177,11 +170,9 @@ Example events include:
 - Successful archive operations
 - Job completion
 
-Runtime log files are excluded from Git so generated operational data is not committed to the repository.
-
 ## Error Handling
 
-The Bash scripts use exit codes to communicate job status.
+The Bash scripts use exit codes to check for successful jobs.
 
 ```text
 0     Successful execution
@@ -195,43 +186,26 @@ For example, the inbound job exits with a failure status if:
 - The received file is empty
 - The archive operation fails
 
-This allows the scripts to be integrated with schedulers or monitoring systems in the future.
-
 ## Development Environment
 
 This project uses a localhost SFTP server to simulate an external vendor environment.
 
 Although the company and vendor endpoints are hosted on the same development machine, the project performs actual SFTP connections using SSH authentication and SFTP `GET` and `PUT` operations.
 
-This provides a safe environment for practicing automated vendor file-transfer workflows without requiring access to a production SFTP server.
+This provides a safe environment for practicing automated vendor file-transfers without access to an actual SFTP server.
 
 ## Skills Demonstrated
 
 - Linux command line
 - Bash scripting
+- Bash debugging
 - SFTP
 - SSH public-key authentication
 - Inbound and outbound file transfers
 - File transfer automation
 - Configuration management
-- Environment variables
-- Exit-code handling
 - Error handling
 - Operational logging
 - File validation
 - File archiving
 - Git and GitHub
-
-## Future Improvements
-
-Potential future enhancements include:
-
-- Schedule jobs using cron
-- Support configurable file names
-- Support multiple vendor configurations
-- Add email or mobile notifications for failed jobs
-- Add additional data-quality validation
-- Encrypt or decrypt files using PGP
-- Load inbound data into a database
-- Add retry logic for failed transfers
-- Containerize the SFTP test environment
