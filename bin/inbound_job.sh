@@ -11,12 +11,23 @@ SFTP_USER="kennethquach"
 SFTP_KEY="$HOME/.ssh/sftp_pipeline_key"
 REMOTE_DIR="vendor_sftp/inbound"
 FILE_NAME="vendor_customer.csv"
+ACTUAL_HEADER=$(head -n 1 "$INBOUND_DIR/$FILE_NAME")
+if [ "$ACTUAL_HEADER" != "$Expected_HEADER" ]; then
+	echo "ERROR: Invalid CSV header."
+	echo "Expected: $EXPECTED_HEADER"
+	echo "Received: $ACTUAL_HEADER"
+	echo "[$TIMESTAMP] ERROR: Invalid CSV header." >> "$LOG_FILE"
+	exit 1
+fi
+
+echo "CSV header validation passed"
+
 
 echo "Starting $JOB_NAME..."
 echo "Project Directory: $BASE_DIR"
 echo "Inbound Directory: $INBOUND_DIR"
 
-if [ -f "$INBOUND_DIR/$FILE_NAME"]; then
+if [ -f "$INBOUND_DIR/$FILE_NAME" ]; then
 	echo "Removing existing local files: $FILE_NAME"
 	rm "$INBOUND_DIR/$FILE_NAME"
 fi
@@ -45,6 +56,14 @@ else
 	echo "[$TIMESTAMP] ERROR: File not found: $FILE_NAME" >> "$LOG_FILE"
 	exit 1
 fi
+
+if [ ! -s "$INBOUND_DIR/$FILE_NAME" ]; then
+        echo "ERROR: FILE is empty: $FILE_NAME"
+        echo "[$TIMESTAMP] ERROR: File is empty: $FILE_NAME" >> "$LOG_FILE"
+        exit 1
+fi
+echo "File is not empty: $FILE_NAME"
+
 echo "Job completed successfully."
 echo "[$TIMESTAMP] SUCCESS: $JOB_NAME completed successfully." >> "$LOG_FILE"
 exit 0
