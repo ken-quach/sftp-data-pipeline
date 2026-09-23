@@ -2,17 +2,13 @@
 
 JOB_NAME="outbound_job"
 BASE_DIR="/Users/kennethquach/projects/sftp-data-pipeline"
+source "$BASE_DIR/etc/sftp_config.sh"
 OUTBOUND_DIR="$BASE_DIR/ftp/outbound"
 
 LOG_DIR="$BASE_DIR/log"
 LOG_FILE="$LOG_DIR/outbound_job.log"
 
 TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
-
-SFTP_HOST="localhost"
-SFTP_USER="kennethquach"
-SFTP_KEY="$HOME/.ssh/sftp_pipeline_key"
-REMOTE_DIR="vendor_sftp/from_company"
 
 FILE_NAME="customer_export.csv"
 echo "Starting $JOB_NAME..."
@@ -28,7 +24,7 @@ echo "Outbound file found: $FILE_NAME"
 echo "Starting SFTP transfer..."
 
 sftp -i "$SFTP_KEY" "$SFTP_USER@$SFTP_HOST" <<EOF
-cd "$REMOTE_DIR"
+cd "$REMOTE_OUTBOUND_DIR"
 lcd "$OUTBOUND_DIR"
 put "$FILE_NAME"
 bye
